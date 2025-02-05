@@ -1,0 +1,67 @@
+﻿version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - app_network
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27018:27018"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app_network
+
+  app1:
+    image: ratelimiters.endpoints:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:Redis=redis:6379
+      - ConnectionStrings:MongoDB=mongodb://mongodb:27017
+    ports:
+      - "8082:8082"
+    depends_on:
+      - redis
+      - mongodb
+    networks:
+      - app_network
+
+  app2:
+    image: ratelimiters.endpoints:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:Redis=redis:6379
+      - ConnectionStrings:MongoDB=mongodb://mongodb:27017
+    ports:
+      - "8083:8082"
+    depends_on:
+      - redis
+      - mongodb
+    networks:
+      - app_network
+
+  app3:
+    image: ratelimiters.endpoints:latest
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings:Redis=redis:6379
+      - ConnectionStrings:MongoDB=mongodb://mongodb:27017
+    ports:
+      - "8084:8082"
+    depends_on:
+      - redis
+      - mongodb
+    networks:
+      - app_network
+
+volumes:
+  mongodb_data:
+
+networks:
+  app_network:
+    driver: bridge
