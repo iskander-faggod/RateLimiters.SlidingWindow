@@ -11,20 +11,18 @@ services:
   mongodb:
     image: mongo:latest
     ports:
-      - "27018:27018"
+      - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     networks:
       - app_network
 
   app1:
-    image: ratelimiters.endpoints:latest
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings:Redis=redis:6379
-      - ConnectionStrings:MongoDB=mongodb://mongodb:27017
+    build:
+      context: .
+      dockerfile: RateLimiters.Endpoints/Dockerfile
     ports:
-      - "8082:8082"
+      - "8086:8086"
     depends_on:
       - redis
       - mongodb
@@ -32,13 +30,11 @@ services:
       - app_network
 
   app2:
-    image: ratelimiters.endpoints:latest
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings:Redis=redis:6379
-      - ConnectionStrings:MongoDB=mongodb://mongodb:27017
+    build:
+      context: .
+      dockerfile: RateLimiters.Endpoints/Dockerfile
     ports:
-      - "8083:8082"
+      - "8085:8086"
     depends_on:
       - redis
       - mongodb
@@ -46,13 +42,11 @@ services:
       - app_network
 
   app3:
-    image: ratelimiters.endpoints:latest
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings:Redis=redis:6379
-      - ConnectionStrings:MongoDB=mongodb://mongodb:27017
+    build:
+      context: .
+      dockerfile: RateLimiters.Endpoints/Dockerfile
     ports:
-      - "8084:8082"
+      - "8084:8086"
     depends_on:
       - redis
       - mongodb

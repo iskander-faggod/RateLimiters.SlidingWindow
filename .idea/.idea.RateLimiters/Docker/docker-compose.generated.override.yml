@@ -1,6 +1,45 @@
 # This is a generated file. Not intended for manual editing.
+version: "3.8"
 services:
-  ratelimiters.endpoints:
+  app1:
+    build:
+      context: "/Users/iskander-faggod/RiderProjects/RateLimiters.Test"
+      dockerfile: "RateLimiters.Endpoints/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/RateLimiters.Endpoints.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "ratelimiters.endpoints:dev"
+    ports: []
+    volumes:
+    - "/Users/iskander-faggod/.nuget/packages:/home/app/.nuget/packages"
+    - "/Users/iskander-faggod/RiderProjects/RateLimiters.Test/RateLimiters.Endpoints:/app:rw"
+    - "/Users/iskander-faggod/RiderProjects/RateLimiters.Test:/src:rw"
+    working_dir: "/app"
+  app2:
+    build:
+      context: "/Users/iskander-faggod/RiderProjects/RateLimiters.Test"
+      dockerfile: "RateLimiters.Endpoints/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/RateLimiters.Endpoints.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "ratelimiters.endpoints:dev"
+    ports: []
+    volumes:
+    - "/Users/iskander-faggod/.nuget/packages:/home/app/.nuget/packages"
+    - "/Users/iskander-faggod/RiderProjects/RateLimiters.Test/RateLimiters.Endpoints:/app:rw"
+    - "/Users/iskander-faggod/RiderProjects/RateLimiters.Test:/src:rw"
+    working_dir: "/app"
+  app3:
     build:
       context: "/Users/iskander-faggod/RiderProjects/RateLimiters.Test"
       dockerfile: "RateLimiters.Endpoints/Dockerfile"

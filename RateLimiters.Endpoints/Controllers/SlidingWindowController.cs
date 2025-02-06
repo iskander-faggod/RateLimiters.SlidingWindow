@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using MongoDB.Driver;
@@ -11,10 +12,12 @@ namespace RateLimiters.Endpoints.Controllers;
 [EnableRateLimiting("demo_sliding_window")]
 public class SlidingWindowController : ControllerBase
 {
+    private readonly ILogger<SlidingWindowController> _logger;
     private readonly IMongoCollection<RequestLog> _requestLogs;
 
-    public SlidingWindowController(IMongoDatabase database)
+    public SlidingWindowController(IMongoDatabase database, ILogger<SlidingWindowController> logger)
     {
+        _logger = logger;
         _requestLogs = database.GetCollection<RequestLog>("RequestLogs");
     }
 
@@ -35,6 +38,8 @@ public class SlidingWindowController : ControllerBase
     [HttpGet]
     public async Task<IEnumerable<WeatherForecast>> Get()
     {
+        _logger.LogInformation($"Пишется объект");
+
         var log = new RequestLog
         {
             InstanceId = Environment.MachineName, // Идентификатор инстанса (имя машины)
@@ -43,6 +48,8 @@ public class SlidingWindowController : ControllerBase
         };
 
         await _requestLogs.InsertOneAsync(log);
+
+        _logger.LogInformation($"Запился объект {JsonSerializer.Serialize(log)}");
 
         return Enumerable
             .Range(1, 5)
